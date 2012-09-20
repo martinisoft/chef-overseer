@@ -77,6 +77,12 @@ module Overseer
                     installer_url: installer_url,
                     script_flags: script_flags,
                     user: app['name']
+
+    # Reset permissions on the rvmrc file
+    file "#{rvm_prefix}/.rvm/.rvmrc" do
+      group app['name']
+    end
+
   end
 
   def create_app_user(user)
