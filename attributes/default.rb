@@ -19,5 +19,6 @@
 # limitations under the License.
 #
 
+default['overseer']['data_bag_name'] = "overseer_apps"
 default['overseer']['root_path'] = "/srv"
 default['overseer']['first_http_port'] = 8000
