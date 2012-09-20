@@ -57,10 +57,21 @@ module Overseer
 
     version = node['rvm']['version']
     branch  = node['rvm']['branch']
+    rvmrc   = {
+      'rvm_project_rvmrc'             => 1,
+      'rvm_gemset_create_on_use_flag' => 1,
+      'rvm_trust_rvmrcs_flag'         => 1
+    }
 
     script_flags      = build_script_flags(version, branch)
     installer_url     = node['rvm']['installer_url']
     rvm_prefix        = "#{node['overseer']['root_path']}/#{app['name']}"
+    rvm_gem_options   = node['rvm']['rvm_gem_options']
+
+    rvmrc_template  rvm_prefix: rvm_prefix,
+                    rvm_gem_options: rvm_gem_options,
+                    rvmrc: rvmrc,
+                    user: app['name']
 
     install_rvm     rvm_prefix: rvm_prefix,
                     installer_url: installer_url,
