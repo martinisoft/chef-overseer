@@ -155,7 +155,7 @@ module Overseer
     end
 
     if config['ssh_keys']
-      user_account user do
+      user_account user['id'] do
         ssh_keys config['ssh_keys']
         action :manage
       end
