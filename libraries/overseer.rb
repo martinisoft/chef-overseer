@@ -71,7 +71,7 @@ module Overseer
   def create_app_user(user)
     user_home = "#{node['overseer']['root_path']}/#{user}"
 
-    user_account username do
+    user_account user do
       home user_home
       system_user false
       manage_home true
