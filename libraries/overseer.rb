@@ -149,7 +149,17 @@ module Overseer
 
     directory root_path
 
-    [app_home, "#{app_home}/shared", "#{app_home}/shared/config", "#{app_home}/shared/sv"].each do |dir|
+    app_dirs = [
+      app_home,
+      "#{app_home}/shared",
+      "#{app_home}/shared/config",
+      "#{app_home}/shared/sv",
+      "#{app_home}/shared/sessions",
+      "#{app_home}/shared/sockets",
+      "#{app_home}/shared/pids"
+    ]
+
+    app_dirs.each do |dir|
       directory dir do
         owner       user['id']
         group       user['gid']
