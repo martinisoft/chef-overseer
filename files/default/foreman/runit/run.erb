@@ -1,4 +1,5 @@
-#!/bin/sh
-cd <%= engine.directory %>
+#!/bin/bash
+source /srv/<%= user %>/.rvm/scripts/rvm
+cd <%= engine.root %>
 export $(cat .env)
 exec <%= process.command %>
