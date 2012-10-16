@@ -58,7 +58,7 @@ module Overseer
     version = node['rvm']['version']
     branch  = node['rvm']['branch']
     rvmrc   = {
-      'rvm_project_rvmrc'             => 1,
+      'rvm_install_on_use_flag'       => 1,
       'rvm_gemset_create_on_use_flag' => 1,
       'rvm_trust_rvmrcs_flag'         => 1
     }
