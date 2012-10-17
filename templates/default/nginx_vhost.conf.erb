@@ -2,7 +2,11 @@
   app_name          = @app['name']
   upstream_server   = @app['http']['upstream_server']
   host_name         = @app['http']['host_name']
+  use_ssl           = @app['http']['use_ssl']
   http_port         = @app['http']['http_port']
+  https_port        = @app['http']['https_port']
+  ssl_cert          = "#{@ssl_certs_path}/#{@app['http']['ssl_certificate']}"
+  ssl_cert_key      = "#{@ssl_private_path}/#{@app['http']['ssl_certificate_key']}"
 -%>
 upstream <%= app_name %> {
   server <%= upstream_server %> fail_timeout=0;
@@ -12,6 +16,14 @@ server {
   server_name <%= Array(host_name).join(' ') %>;
 <% Array(http_port).each do |port| -%>
   listen <%= port %>;
+<% end -%>
+<% if use_ssl -%>
+  <% Array(https_port).each do |port| -%>
+  listen <%= port %> ssl;
+  <% end -%>
+
+  ssl_certificate     <%= ssl_cert %>;
+  ssl_certificate_key <%= ssl_cert_key %>;
 <% end -%>
 
   root <%= @deploy_to_path %>/current/public;

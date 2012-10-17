@@ -34,6 +34,10 @@ module Overseer
       app['http']                ||= Hash.new
       app['http']['host_name']   ||= "_"
       app['http']['http_port']   ||= 80
+      app['http']['https_port']  ||= 443
+
+      app['http']['ssl_certificate']      ||= "#{app['name']}.crt"
+      app['http']['ssl_certificate_key']  ||= "#{app['name']}.key"
 
       deploy_to = "#{node['overseer']['root_path']}/#{app['name']}"
       app['http']['upstream_server'] ||=
@@ -208,6 +212,8 @@ module Overseer
         app:              app,
         deploy_to_path:   "#{node['overseer']['root_path']}/#{app['name']}",
         log_path:         node['nginx']['log_dir'],
+        ssl_certs_path:   node['overseer']['http']['ssl_certs_path'],
+        ssl_private_path: node['overseer']['http']['ssl_private_path']
       })
 
       not_if      { template_cookbook == "none" }
