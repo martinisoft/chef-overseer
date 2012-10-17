@@ -107,6 +107,13 @@ module Overseer
       recursive   true
     end
 
+    directory "#{user['home']}/.foreman/templates/log" do
+      owner       user['id']
+      group       user['gid']
+      mode        "2755"
+      recursive   true
+    end
+
     cookbook_file "#{user['home']}/.foreman/templates/run.erb" do
       source  "foreman/runit/run.erb"
       owner   user['id']
@@ -114,8 +121,8 @@ module Overseer
       mode    "0644"
     end
 
-    cookbook_file "#{user['home']}/.foreman/templates/log_run.erb" do
-      source  "foreman/runit/log_run.erb"
+    cookbook_file "#{user['home']}/.foreman/templates/log/run.erb" do
+      source  "foreman/runit/log/run.erb"
       owner   user['id']
       group   user['gid']
       mode    "0644"
