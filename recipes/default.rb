@@ -23,6 +23,7 @@ class Chef::Recipe
 end
 
 bag = node['overseer']['data_bag_name']
+Chef::Log.info("Accessing Overseer data from Data Bag: #{bag}")
 
 data_bag_items = begin
   data_bag(bag)
