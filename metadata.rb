@@ -7,7 +7,7 @@ version          "0.2.1"
 
 supports "ubuntu"
 
-depends "nginx"
+recommends "nginx"
 depends "user"
 depends "runit"
 depends "rvm"

@@ -64,5 +64,7 @@ Array(apps).each do |config|
   install_rvm_environment   config, app_user
   create_app_dirs           config, app_user
   configure_app_environment config, app_user
-  create_app_vhost          config, app_user
+  if node['overseer']['webserver']
+    create_app_vhost config, app_user
+  end
 end
