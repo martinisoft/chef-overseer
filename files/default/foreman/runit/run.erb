@@ -1,5 +1,5 @@
 #!/bin/bash
 source /srv/<%= user %>/.rvm/scripts/rvm
-cd <%= engine.root %>
+cd /srv/<%= user %>/current
 export $(cat .env)
 exec <%= process.command %>
