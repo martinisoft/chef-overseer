@@ -64,7 +64,8 @@ Array(apps).each do |config|
   install_rvm_environment   config, app_user
   create_app_dirs           config, app_user
   configure_app_environment config, app_user
-  if node['overseer']['webserver']
+  if require_webserver?(config)
+    Chef::Log.info("Creating vhost for: #{config['name']}")
     create_app_vhost config, app_user
   end
 end

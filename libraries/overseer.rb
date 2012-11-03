@@ -222,4 +222,18 @@ module Overseer
 
     nginx_site "#{app['name']}.conf"
   end
+
+  # Public: Does this app require a webserver?
+  # Defaults to the node configuration, but the application can override this
+  #
+  # config - config object array that contains the ['http']['required'] keys
+  #
+  # Returns true or false depending on settings present
+  def require_webserver?(config)
+    http_required = config['http']['required']
+
+    return http_required unless http_required.nil?
+
+    node['overseer']['webserver']
+  end
 end
