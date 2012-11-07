@@ -1,5 +1,6 @@
 <%
   app_name          = @app['name']
+  redirects         = @app['http']['redirects']
   upstream_server   = @app['http']['upstream_server']
   host_name         = @app['http']['host_name']
   use_ssl           = @app['http']['use_ssl']
@@ -11,6 +12,16 @@
 upstream <%= app_name %> {
   server <%= upstream_server %> fail_timeout=0;
 }
+
+<% unless redirects.empty? -%>
+  <% redirects.each do |redirect| -%>
+server {
+  listen       80;
+  server_name  <%= redirect['hostname'] %>;
+  return       301 <%= redirect['url'] %>;
+}
+  <% end -%>
+<% end -%>
 
 server {
   server_name <%= Array(host_name).join(' ') %>;
