@@ -19,7 +19,7 @@ upstream <%= app_name %> {
 server {
   listen       80;
   server_name  <%= info['hostname'] %>;
-  return       301 <%= info['url'] %>;
+  return       <%= info['code'] || '301' %> <%= info['url'] %>;
 }
   <% end -%>
 <% end -%>
