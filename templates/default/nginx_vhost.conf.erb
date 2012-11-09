@@ -13,12 +13,13 @@ upstream <%= app_name %> {
   server <%= upstream_server %> fail_timeout=0;
 }
 
-<% unless redirects.empty? -%>
-  <% redirects.each do |redirect| -%>
+<% if redirects -%>
+  <% redirects.each do |site, info| -%>
+# Redirect for <%= site %>
 server {
   listen       80;
-  server_name  <%= redirect['hostname'] %>;
-  return       301 <%= redirect['url'] %>;
+  server_name  <%= info['hostname'] %>;
+  return       301 <%= info['url'] %>;
 }
   <% end -%>
 <% end -%>
