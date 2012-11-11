@@ -13,17 +13,6 @@ upstream <%= app_name %> {
   server <%= upstream_server %> fail_timeout=0;
 }
 
-<% if redirects -%>
-  <% redirects.each do |site, info| -%>
-# Redirect for <%= site %>
-server {
-  listen       80;
-  server_name  <%= info['hostname'] %>;
-  return       <%= info['code'] || '301' %> <%= info['url'] %>;
-}
-  <% end -%>
-<% end -%>
-
 server {
   server_name <%= Array(host_name).join(' ') %>;
 <% Array(http_port).each do |port| -%>
@@ -85,3 +74,14 @@ server {
     proxy_temp_file_write_size  64k;
   }
 }
+<% if redirects -%>
+  <% redirects.each do |site, info| -%>
+
+# Redirect for <%= site %>
+server {
+  listen       80;
+  server_name  <%= info['hostname'] %>;
+  return       <%= info['code'] || '301' %> <%= info['url'] %>;
+}
+  <% end -%>
+<% end -%>
