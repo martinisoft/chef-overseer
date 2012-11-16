@@ -68,4 +68,8 @@ Array(apps).each do |config|
     Chef::Log.info("Creating vhost for: #{config['name']}")
     create_app_vhost config, app_user
   end
+  if require_nodejs?(config)
+    Chef::Log.info("Installing nodejs for: #{config['name']}")
+    install_nodejs_environment config, app_user
+  end
 end

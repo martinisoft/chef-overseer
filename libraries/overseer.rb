@@ -90,6 +90,55 @@ module Overseer
 
   end
 
+  def install_nodejs_environment(app, user)
+    nodejs_tar = "node-v#{node['nodejs']['version']}.tar.gz"
+    nodejs_tar_path = nodejs_tar
+    if node['nodejs']['version'].split('.')[1].to_i >= 5
+      nodejs_tar_path = "v#{node['nodejs']['version']}/#{nodejs_tar_path}"
+    end
+    nodejs_src_url = "http://nodejs.org/dist/#{nodejs_tar_path}"
+    nodejs_dir = "/#{node['overseer']['root_path']}/#{app['name']}/.nodejs"
+
+    package "libssl-dev"
+
+    remote_file "/usr/local/src/#{nodejs_tar}" do
+      source nodejs_src_url
+      checksum node['nodejs']['checksum']
+      mode 0644
+      action :create_if_missing
+    end
+
+    execute "tar --no-same-owner -zxf #{nodejs_tar}" do
+      cwd "/usr/local/src"
+      creates "/usr/local/src/node-v#{node['nodejs']['version']}"
+    end
+
+    bash "compile node.js" do
+      cwd "/usr/local/src/node-v#{node['nodejs']['version']}"
+      code <<-EOH
+        ./configure --prefix=#{nodejs_dir} && make
+      EOH
+      creates "/usr/local/src/node-v#{node['nodejs']['version']}/node"
+    end
+
+    execute "nodejs make install" do
+      command "make install"
+      cwd "/usr/local/src/node-v#{node['nodejs']['version']}"
+      not_if {File.exists?("#{nodejs_dir}/bin/node") && `#{nodejs_dir}/bin/node --version`.chomp == "v#{node['nodejs']['version']}" }
+    end
+
+    execute "change ownership of node installation" do
+      command "chown -R #{app['name']}:#{app['name']} #{nodejs_dir}"
+    end
+
+    template "/etc/profile.d/nodejs.sh" do
+      source  "nodejs.sh.erb"
+      owner   "root"
+      mode    "0755"
+    end
+
+  end
+
   def create_app_user(user)
     user_home = "#{node['overseer']['root_path']}/#{user}"
 
@@ -236,5 +285,19 @@ module Overseer
     return http_required unless http_required.nil?
 
     node['overseer']['webserver']
+  end
+
+  # Public: Does this app require nodejs?
+  # Defaults to the node configuration, but the application can override this
+  #
+  # config - config object array that contains the ['nodejs']['required'] keys
+  #
+  # Returns true or false depending on settings present
+  def require_nodejs?(config)
+    nodejs_required = config['nodejs']['required']
+
+    return nodejs_required unless nodejs_required.nil?
+
+    node['overseer']['nodejs']
   end
 end
