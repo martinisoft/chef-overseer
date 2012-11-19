@@ -27,6 +27,6 @@ default['overseer']['first_http_port'] = 8000
 default['overseer']['http']['ssl_certs_path']    = "/etc/ssl/certs"
 default['overseer']['http']['ssl_private_path']  = "/etc/ssl/private"
 
-default['overseer']['nodejs'] = false
+default['overseer']['nodeserver'] = false
 default['overseer']['nodejs']['version'] = '0.8.14'
 default['overseer']['nodejs']['checksum'] = '47a1186004f6ce5e25a8555429d72b15519bc7f1'

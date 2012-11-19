@@ -298,6 +298,6 @@ module Overseer
 
     return nodejs_required unless nodejs_required.nil?
 
-    node['overseer']['nodejs']
+    node['overseer']['nodeserver']
   end
 end
