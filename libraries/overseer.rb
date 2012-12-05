@@ -280,7 +280,11 @@ module Overseer
   #
   # Returns true or false depending on settings present
   def require_webserver?(config)
-    http_required = config['http']['required']
+    if config.has_key?('http')
+      http_required = config['http']['required']
+    else
+      http_required = nil
+    end
 
     return http_required unless http_required.nil?
 
@@ -294,7 +298,11 @@ module Overseer
   #
   # Returns true or false depending on settings present
   def require_nodejs?(config)
-    nodejs_required = config['nodejs']['required']
+    if config.has_key?('nodejs')
+      nodejs_required = config['nodejs']['required']
+    else
+      nodejs_required = nil
+    end
 
     return nodejs_required unless nodejs_required.nil?
 
