@@ -17,6 +17,17 @@ map $request_uri $request_key {
   default "";
   ~^/(?P<key>.+)$ $key;
 }
+<% if redirects -%>
+  <% redirects.each do |site, info| -%>
+
+# Redirect for <%= site %>
+server {
+  listen       <%= info['listen'] || '80' %>;
+  server_name  <%= info['hostname'] %>;
+  return       <%= info['code'] || '301' %> <%= info['url'] %>;
+}
+  <% end -%>
+<% end -%>
 
 server {
   server_name <%= Array(host_name).join(' ') %>;
@@ -79,14 +90,3 @@ server {
     proxy_temp_file_write_size  64k;
   }
 }
-<% if redirects -%>
-  <% redirects.each do |site, info| -%>
-
-# Redirect for <%= site %>
-server {
-  listen       80;
-  server_name  <%= info['hostname'] %>;
-  return       <%= info['code'] || '301' %> <%= info['url'] %>;
-}
-  <% end -%>
-<% end -%>
