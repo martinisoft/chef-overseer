@@ -91,10 +91,10 @@ module Overseer
   end
 
   def install_nodejs_environment(app, user)
-    nodejs_tar = "node-v#{node['nodejs']['version']}.tar.gz"
+    nodejs_tar = "node-v#{node['overseer']['nodejs']['version']}.tar.gz"
     nodejs_tar_path = nodejs_tar
-    if node['nodejs']['version'].split('.')[1].to_i >= 5
-      nodejs_tar_path = "v#{node['nodejs']['version']}/#{nodejs_tar_path}"
+    if node['overseer']['nodejs']['version'].split('.')[1].to_i >= 5
+      nodejs_tar_path = "v#{node['overseer']['nodejs']['version']}/#{nodejs_tar_path}"
     end
     nodejs_src_url = "http://nodejs.org/dist/#{nodejs_tar_path}"
     nodejs_dir = "/#{node['overseer']['root_path']}/#{app['name']}/.nodejs"
@@ -103,28 +103,28 @@ module Overseer
 
     remote_file "/usr/local/src/#{nodejs_tar}" do
       source nodejs_src_url
-      checksum node['nodejs']['checksum']
+      checksum node['overseer']['nodejs']['checksum']
       mode 0644
       action :create_if_missing
     end
 
     execute "tar --no-same-owner -zxf #{nodejs_tar}" do
       cwd "/usr/local/src"
-      creates "/usr/local/src/node-v#{node['nodejs']['version']}"
+      creates "/usr/local/src/node-v#{node['overseer']['nodejs']['version']}"
     end
 
     bash "compile node.js" do
-      cwd "/usr/local/src/node-v#{node['nodejs']['version']}"
+      cwd "/usr/local/src/node-v#{node['overseer']['nodejs']['version']}"
       code <<-EOH
         ./configure --prefix=#{nodejs_dir} && make
       EOH
-      creates "/usr/local/src/node-v#{node['nodejs']['version']}/node"
+      creates "/usr/local/src/node-v#{node['overseer']['nodejs']['version']}/node"
     end
 
     execute "nodejs make install" do
       command "make install"
-      cwd "/usr/local/src/node-v#{node['nodejs']['version']}"
-      not_if {File.exists?("#{nodejs_dir}/bin/node") && `#{nodejs_dir}/bin/node --version`.chomp == "v#{node['nodejs']['version']}" }
+      cwd "/usr/local/src/node-v#{node['overseer']['nodejs']['version']}"
+      not_if {File.exists?("#{nodejs_dir}/bin/node") && `#{nodejs_dir}/bin/node --version`.chomp == "v#{node['overseer']['nodejs']['version']}" }
     end
 
     execute "change ownership of node installation" do
