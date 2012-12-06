@@ -97,7 +97,7 @@ module Overseer
       nodejs_tar_path = "v#{node['overseer']['nodejs']['version']}/#{nodejs_tar_path}"
     end
     nodejs_src_url = "http://nodejs.org/dist/#{nodejs_tar_path}"
-    nodejs_dir = "/#{node['overseer']['root_path']}/#{app['name']}/.nodejs"
+    nodejs_dir = "#{node['overseer']['root_path']}/#{app['name']}/.nodejs"
 
     package "libssl-dev"
 
