@@ -1,5 +1,11 @@
 #!/bin/bash
-source /srv/<%= user %>/.rvm/scripts/rvm
+
+# Export Node
+[[ -d  "${HOME}/.nodejs/bin" ]] && export PATH="${HOME}/.nodejs/bin:$PATH"
+
+# Source RVM
+[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm"
+
 cd /srv/<%= user %>/current
 export $(cat .env)
 exec <%= process.command %>
