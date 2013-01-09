@@ -253,6 +253,21 @@ module Overseer
   def create_app_vhost(app, user)
     template_cookbook, template_source = app['vhost_template'].split('::')
 
+    template "#{node['nginx']['dir']}/#{app['name']}_htpasswd" do
+      cookbook    template_cookbook
+      source      "htpasswd.erb"
+      owner       "www-data"
+      group       "www-data"
+      mode        "640"
+      variables({
+        user:  app['http_auth']['user'],
+        password: app['http_auth']['password']
+      })
+
+      only_if { app.has_key?('http_auth') }
+      notifies    :reload, "service[nginx]"
+    end
+
     template "#{node['nginx']['dir']}/sites-available/#{app['name']}.conf" do
       cookbook    template_cookbook
       source      template_source

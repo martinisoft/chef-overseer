@@ -3,6 +3,7 @@
   redirects         = @app['http']['redirects']
   upstream_server   = @app['http']['upstream_server']
   host_name         = @app['http']['host_name']
+  http_auth         = @app['http']['http_auth']
   use_ssl           = @app['http']['use_ssl']
   http_port         = @app['http']['http_port']
   https_port        = @app['http']['https_port']
@@ -46,6 +47,11 @@ server {
   client_max_body_size 4G;
 
   location / {
+  <% if password_protect -%>
+    auth_basic "Restricted";
+    auth_basic_user_file <%= app_name %>_htpasswd;
+
+  <% end -%>
     try_files /system/maintenance.html
               $uri $uri/index.html $uri.html
               @app;
