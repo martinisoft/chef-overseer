@@ -48,7 +48,7 @@ server {
 
   location / {
   <% if http_auth -%>
-    auth_basic "Restricted";
+    auth_basic "<%= app_name %>";
     auth_basic_user_file <%= app_name %>_htpasswd;
 
   <% end -%>
