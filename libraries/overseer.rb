@@ -259,10 +259,7 @@ module Overseer
       owner       "www-data"
       group       "www-data"
       mode        "640"
-      variables({
-        user:  app['http_auth']['user'],
-        password: app['http_auth']['password']
-      })
+      variables({ app: app })
 
       only_if { app.has_key?('http_auth') }
       notifies    :reload, "service[nginx]"
