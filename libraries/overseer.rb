@@ -36,6 +36,7 @@ module Overseer
       app['http']['http_port']   ||= 80
       app['http']['https_port']  ||= 443
       app['http']['redirects']   ||= []
+      app['http']['rewrites']    ||= []
 
       app['http']['ssl_certificate']      ||= "#{app['name']}.crt"
       app['http']['ssl_certificate_key']  ||= "#{app['name']}.key"

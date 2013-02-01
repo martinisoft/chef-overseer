@@ -1,6 +1,7 @@
 <%
   app_name          = @app['name']
   redirects         = @app['http']['redirects']
+  rewrites          = @app['http']['rewrites']
   upstream_server   = @app['http']['upstream_server']
   host_name         = @app['http']['host_name']
   http_auth         = @app['http']['http_auth']
@@ -45,6 +46,13 @@ server {
 
   # allow clients to upload large files (if necessary)
   client_max_body_size 4G;
+<% if rewrites -%>
+  <% rewrites.each do |name, info| -%>
+
+  # Rewrite: <%= name %>
+  rewrite <%= info['pattern'] %> <%= info['url'] %>;
+  <% end -%>
+<% end -%>
 
   location / {
   <% if http_auth -%>
