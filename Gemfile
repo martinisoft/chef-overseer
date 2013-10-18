@@ -1,8 +1,9 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'cucumber', '~> 1.1.8'
-gem 'minitest', '~> 3.0.0'
+gem 'foodcritic'
 
 group :kitchen  do
-  gem 'test-kitchen'
+  gem 'berkshelf', '~> 2.0'
+  gem 'test-kitchen', '~> 1.0.0.beta.3'
+  gem 'kitchen-vagrant', '~> 0.11.0'
 end
